@@ -21,3 +21,21 @@
       服务器通信部分，没有规定必须要用某种协议，所以只要能在两边传输消息的技术可以使用，例如WebSocket、XHR等，大家自行选择即可。
  * 
 */
+var server = require('./server.js')
+var log = require('./log').log
+var port = process.argv[2] || 5001
+
+// 404
+function fourohfour (info) {
+  let res = info.res
+  log('request handler 404 was called.')
+  res.writeHead(404, {'Content-type': 'text/plain'})
+  res.write('404 page not found')
+  res.end()
+}
+
+var handle = {}
+handle['/'] = fourohfour
+
+server.serverFilePath('static')
+server.start(handle, port)
